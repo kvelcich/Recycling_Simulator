@@ -1,9 +1,9 @@
 import java.util.Random;
 
 public class Recyclable {
-    String type;
-    double pricePerPound;
-    double relativeWeight;
+    private String type;
+    private double pricePerPound;
+    private double relativeWeight;
 
     public Recyclable(String type, double pricePerPound, double relativeWeight) {
         this.type = type;
@@ -11,9 +11,13 @@ public class Recyclable {
         this.relativeWeight = relativeWeight;
     }
 
-    public Money generate() {
+    public double generate() {
         Random r = new Random();
         double randomVal = 0.5 + r.nextDouble();
-        return new Money(0, (int)(randomVal*relativeWeight));
+        return randomVal*relativeWeight;
+    }
+
+    public double getPricePerPound() {
+        return pricePerPound;
     }
 }
