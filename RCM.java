@@ -40,7 +40,11 @@ public class RCM {
         }
     }
 
-    public void checkout() {
-
+    public Receipt checkout() {
+        if (remaining.sufficientFunds(totalDue)) {
+            remaining.subtract(totalDue);
+            return new Receipt(totalDue, true);
+        } else
+            return new Receipt(totalDue, false);
     }
 }
