@@ -68,7 +68,15 @@ public class Money {
     /* Converts the Money object to a string, in order to print out */
     public String toString() {
         return "$" + dollars + "." + String.format("%02d", cents);
+    }
 
+    /* Checks if there is sufficient funds for passed in amount of money. */
+    public boolean sufficientFunds(Money amount) {
+        if (this.getDollars() > amount.getDollars())
+            return true;
+        else if (this.getDollars() == amount.getDollars() && this.getCents() >= amount.getCents())
+            return true;
+        return false;
     }
 }
 
