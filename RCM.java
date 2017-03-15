@@ -47,4 +47,12 @@ public class RCM {
         } else
             return new Receipt(totalDue, false);
     }
+
+    public void empty() {
+        capacity = 0;
+    }
+
+    public void restockMoney() {
+        remaining = MAX_MONEY.clone();
+    }
 }
