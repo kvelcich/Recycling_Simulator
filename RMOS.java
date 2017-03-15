@@ -12,6 +12,4 @@ public class RMOS {
     public void addRecyclable(Recyclable recyclable) {
         recyclablesList.add(recyclable);
     }
-
-
 }
