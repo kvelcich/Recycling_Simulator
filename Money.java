@@ -60,6 +60,11 @@ public class Money {
         return new Money(money.dollars + dollars, money.cents + cents);
     }
 
+    /* Returns a clone of the money object. */
+    public Money clone() {
+        return new Money(this.getDollars(), this.getCents());
+    }
+
     /* Converts the Money object to a string, in order to print out */
     public String toString() {
         return "$" + dollars + "." + String.format("%02d", cents);
