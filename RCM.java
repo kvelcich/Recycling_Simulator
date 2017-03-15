@@ -12,6 +12,8 @@ public class RCM {
     private double capacity;
     private final double MAX_CAPACITY;
 
+    private StatCalculator statCalculator;
+
 
     public RCM(int id, String location, double capacity, Money money) {
         this.id = id;
@@ -24,6 +26,8 @@ public class RCM {
 
         this.capacity = 0;
         this.MAX_CAPACITY = capacity;
+
+        statCalculator = new StatCalculator();
     }
 
     public int getId() {
@@ -55,6 +59,7 @@ public class RCM {
         if (capacity + weight <= MAX_CAPACITY) {
             capacity += weight;
             totalDue.addTo(0, (int) (weight * recyclable.getPricePerPound()));
+            statCalculator.addRecyclable(recyclable.getType(), weight);
         } else {
             checkout();
         }
