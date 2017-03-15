@@ -1,11 +1,11 @@
 public class RCM {
-    int totalAmount;
+    Money totalAmount;
 
     public RCM() {
-        totalAmount = 0;
+        totalAmount = new Money();
     }
 
-    public void recycleItem() {
-
+    public void recycleItem(Recyclable recyclable) {
+        totalAmount = totalAmount.add(recyclable.generate());
     }
 }
