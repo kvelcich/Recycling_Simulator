@@ -26,6 +26,26 @@ public class RCM {
         this.MAX_CAPACITY = capacity;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public Money getMoney() {
+        return remaining;
+    }
+
+    public double getCapacity() {
+        return capacity;
+    }
+
+    public double getAvailableCapacity() {
+        return MAX_CAPACITY - capacity;
+    }
+
     public void setRecyclableList(ArrayList<Recyclable> recyclableList) {
         this.recyclableList = recyclableList;
     }

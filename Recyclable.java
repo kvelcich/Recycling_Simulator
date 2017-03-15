@@ -20,4 +20,12 @@ public class Recyclable {
     public double getPricePerPound() {
         return pricePerPound;
     }
+
+    public void setPricePerPound(double pricePerPound) {
+        this.pricePerPound = pricePerPound;
+    }
+
+    public String getType() {
+        return type;
+    }
 }
