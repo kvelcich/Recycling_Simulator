@@ -118,8 +118,8 @@ public class RCM {
     }
     
     /* Stat Calculator Functions */
-    public int numItemPerTimeFrame(Recyclable recyclable, int timeFrame) {
-    	return StatCalculator.numItemInTimeFrame(id, recyclable.getType(), timeFrame);
+    public int numSpecItemPerTimeFrame(Recyclable recyclable, int timeFrame) {
+    	return StatCalculator.numSpecItemInTimeFrame(id, recyclable.getType(), timeFrame);
     }
     
     public double getCompleteWeight() {
@@ -140,5 +140,13 @@ public class RCM {
     
     public String getLastEmpty() {
     	return StatCalculator.getLastEmpty(id);
+    }
+    
+    public Money getMoneyInTimeFrame(int timeFrame) {
+    	return StatCalculator.getMoneyInTimeFrame(id, timeFrame);
+    }
+    
+    public int numItemInTimeFrame(int timeFrame) {
+    	return StatCalculator.numItemInTimeFrame(id, timeFrame);
     }
 }
