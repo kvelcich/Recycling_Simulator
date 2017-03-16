@@ -66,6 +66,10 @@ public class RCM {
     	return new Money(0, (int)(lastWeight * lastRecycled.getPricePerPound()));
     }
     
+    public Money getTotalDue() {
+    	return totalDue;
+    }
+    
     public void setRecyclableList(ArrayList<Recyclable> recyclableList) {
         this.recyclableList = recyclableList;
     }
