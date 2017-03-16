@@ -66,7 +66,7 @@ public class Money {
      * @return a new Money object containing the difference of the called on object and the parameter object
      */
     public Money subtract (Money money) {
-    	int cents = this.getDollars()*100 + this.getCents();
+    	int cents = this.getDollars() * 100 + this.getCents();
     	int subCents = money.getDollars() * 100 + money.getCents();
     	
     	return new Money(0, cents - subCents);

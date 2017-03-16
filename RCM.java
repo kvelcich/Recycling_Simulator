@@ -91,6 +91,10 @@ public class RCM {
         }
     }
 
+    public boolean sufficientCapacity(double weight) {
+    	return (weight + capacity <= MAX_CAPACITY);
+    }
+    
     public Receipt checkout() {
         if (remaining.sufficientFunds(totalOwed)) {
             remaining.subtract(totalOwed);
