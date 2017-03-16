@@ -16,10 +16,7 @@ public class StatCalculator {
 	private static final int WEEK = 70;
 	private static final int MONTH = 300;
 	
-	public StatCalculator() {
-	}
-	
-	public void itemRecycled(int id, Recyclable recyclable, double weight) {
+	public static void itemRecycled(int id, Recyclable recyclable, double weight) {
 		DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
 		String timestamp = df.format(calobj.getTime());
@@ -37,7 +34,7 @@ public class StatCalculator {
 		}
 	}
 	
-	public int numItemPerTimeFrame(int id, String type, int timeFrame) {
+	public static int numItemInTimeFrame(int id, String type, int timeFrame) {
 		int counter = 0;
 		
 		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
@@ -70,7 +67,7 @@ public class StatCalculator {
 		return counter;
 	}
 	
-	public int getAmountUsed(int id) {
+	public static int getCompleteWeight(int id) {
 		int counter = 0;
 		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
 		    String line;
@@ -82,7 +79,7 @@ public class StatCalculator {
 		return counter;
 	}
 	
-	public double getWeightInTimeFrame(int id, int timeFrame) {
+	public static double getWeightInTimeFrame(int id, int timeFrame) {
 		double weight = 0;
 		
 		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
@@ -115,7 +112,7 @@ public class StatCalculator {
 		return weight;
 	}
 	
-	public Money totalMoneyIssued(int id) {
+	public static Money totalMoneyIssued(int id) {
 		Money total = new Money();
 		
 		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
@@ -130,7 +127,7 @@ public class StatCalculator {
 		return total;
 	}
 	
-	public void Empty(int id) {
+	public static void Empty(int id) {
 		DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
 		String timestamp = df.format(calobj.getTime());
@@ -148,7 +145,7 @@ public class StatCalculator {
 		}
 	}
 	
-	public int getEmptyPerTimeFrame(int id, int timeFrame) {
+	public static int getEmptyInTimeFrame(int id, int timeFrame) {
 		int counter = 0;
 		
 		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + "Empty.txt"))) {
@@ -179,7 +176,7 @@ public class StatCalculator {
 		return counter;
 	}
 	
-	public String getLastEmpty(int id) {
+	public static String getLastEmpty(int id) {
 		String time = "";
 		
 		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + "Empty.txt"))) {

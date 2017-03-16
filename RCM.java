@@ -85,6 +85,7 @@ public class RCM {
         	lastWeight = weight;
             capacity += weight;
             totalOwed.addTo(0, (int) (weight * recyclable.getPricePerPound()));
+            StatCalculator.itemRecycled(id, recyclable, weight);
         } else {
             checkout();
         }
@@ -100,9 +101,35 @@ public class RCM {
 
     public void empty() {
         capacity = 0;
+        StatCalculator.Empty(id);
     }
 
     public void restockMoney() {
         remaining = MAX_MONEY.clone();
+    }
+    
+    /* Stat Calculator Functions */
+    public int numItemPerTimeFrame(Recyclable recyclable, int timeFrame) {
+    	return StatCalculator.numItemInTimeFrame(id, recyclable.getType(), timeFrame);
+    }
+    
+    public double getCompleteWeight() {
+    	return StatCalculator.getCompleteWeight(id);
+    }
+    
+    public double getWeightInTimeFrame(int timeFrame) {
+    	return StatCalculator.getWeightInTimeFrame(id, timeFrame);
+    }
+
+    public Money getTotalMoneyIssued() {
+    	return StatCalculator.totalMoneyIssued(id);
+    }
+    
+    public int getEmptyInTimeFrame(int timeFrame) {
+    	return StatCalculator.getEmptyInTimeFrame(id, timeFrame);
+    }
+    
+    public String getLastEmpty() {
+    	return StatCalculator.getLastEmpty(id);
     }
 }
