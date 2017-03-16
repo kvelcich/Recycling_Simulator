@@ -84,6 +84,7 @@ public class RCM {
     }
 
     public Receipt checkout() {
+    	lastWeight = 0;
         if (remaining.sufficientFunds(totalDue)) {
             remaining.subtract(totalDue);
             return new Receipt(totalDue, true);
