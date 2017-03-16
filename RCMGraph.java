@@ -3,6 +3,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -11,31 +12,31 @@ import java.util.Random;
 import javax.swing.*;
 
 public class RCMGraph {
-	private int data;
+	private double data;
 	private RCM rcm;
-	public RCMGraph(int data, RCM rcm) {
+	public RCMGraph(double data, RCM rcm) {
 		this.data = data;
 		this.rcm = rcm;
 	}
 	public RCM getRCM() {
 		return rcm;
 	}
-	public int getData() {
+	public double getData() {
 		return data;
 	}
 }
 
 
 class DataManager {
-	public final int WEIGHT = 0;
-	public final int VALUE = 1;
-	public final int ITEM = 2;
-	public final int EMPTY = 3;
+	public static final int WEIGHT = 0;
+	public static final int VALUE = 1;
+	public static final int ITEM = 2;
+	public static final int EMPTY = 3;
 	
-	public final int DAY = StatCalculator.DAY;
-	public final int WEEK = StatCalculator.WEEK;
-	public final int MONTH = StatCalculator.MONTH;
-	public final int YEAR = StatCalculator.YEAR;
+	public static final int DAY = StatCalculator.DAY;
+	public static final int WEEK = StatCalculator.WEEK;
+	public static final int MONTH = StatCalculator.MONTH;
+	public static final int YEAR = StatCalculator.YEAR;
 	
 	private Map<Color, RCMGraph> values = new LinkedHashMap<Color, RCMGraph>();
 	
@@ -46,10 +47,10 @@ class DataManager {
 		values.clear();
 		for (RCM rcm: rcmList) {
 			// the String to int conversion happens here
-			int data = 0;
+			double data = 0;
 			switch (val) {
 				case WEIGHT:
-					data = (int)StatCalculator.getWeightInTimeFrame(rcm.getId(), timeFrame);
+					data = StatCalculator.getWeightInTimeFrame(rcm.getId(), timeFrame);
 					break;
 				case VALUE:
 					data = StatCalculator.getMoneyInTimeFrame(rcm.getId(), timeFrame).toCents();
@@ -76,10 +77,6 @@ class DataManager {
 	}
 }
 
-/**
- * BarChart, creates a chart with sales data, and labels their year
- * @author Kevin Velcich
- */
 class BarChart extends JPanel {
 	//Setting up arrays of values
 	private Map<Color, RCMGraph> bars = new LinkedHashMap<Color, RCMGraph>();
@@ -95,33 +92,29 @@ class BarChart extends JPanel {
 		// Cast the graphics objects to Graphics2D
 		Graphics2D g = (Graphics2D) gp;
 		// determine longest bar
-		int max = Integer.MIN_VALUE;
+		double max = Integer.MIN_VALUE;
 		for (RCMGraph value : bars.values()) {
 			max = Math.max(max, value.getData());
 		}
-		
-		
-		//WORK UP TO HERE
-		
+
 		// paint bars
 
-		int width = (getWidth() / bars.size()) - 2;
-		int x = 1;
+		int height = (getHeight() / bars.size()) - 2;
+		int y = 1;
 		int i = 0;
-		for (Color color : bars.keySet()) {
-			//Adding the rectangle for the bar graph
-			int value = bars.get(color);
-			int height = (int) ((getHeight() - 5) * ((double) value / max));
-			g.setColor(color);
-			g.fillRect(x, getHeight() - height, width, height);
-			g.setColor(Color.black);
-			g.drawRect(x, getHeight() - height, width, height);
-			
-			//Adding the text label for the year
-			g.drawString(year.get(i).toString(), x + width/2, getHeight());
-			x += (width + 2);
-			i++;
-		}
+        int ny = 0;
+
+		for (Map.Entry<Color, RCMGraph> entry : bars.entrySet()) {
+            double value = entry.getValue().getData();
+            int width = (int)((getWidth() - 5) * ((double)value / max));
+            g.setColor(entry.getKey());
+            g.fillRect(0, y, width, height);
+            g.setFont(new Font("Arial", Font.PLAIN, 12));
+            g.setColor(Color.BLACK);
+            g.drawString("RCM - " + entry.getValue().getRCM().getId(), 10, y + height/2);
+            y += (height + 2);
+            i++;
+        }
 	}
 
 	@Override
