@@ -12,9 +12,10 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 public class StatCalculator {	
-	private static final int DAY = 10;
-	private static final int WEEK = 70;
-	private static final int MONTH = 300;
+	public static final int DAY = 10;
+	public static final int WEEK = 70;
+	public static final int MONTH = 300;
+	public static final int YEAR = 3600;
 	
 	public static void itemRecycled(int id, Recyclable recyclable, double weight) {
 		DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");

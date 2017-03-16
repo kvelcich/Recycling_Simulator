@@ -90,5 +90,10 @@ public class Money {
             return true;
         return false;
     }
+    
+    /* Converts to cents */
+    public int toCents() {
+    	return this.getDollars() * 100 + this.getCents();
+    }
 }
 
