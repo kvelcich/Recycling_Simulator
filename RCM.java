@@ -110,7 +110,7 @@ public class RCM {
 
     public void empty() {
         capacity = 0;
-        StatCalculator.Empty(id);
+        StatCalculator.empty(id);
     }
 
     public void restockMoney() {

@@ -127,7 +127,7 @@ public class StatCalculator {
 		return total;
 	}
 	
-	public static void Empty(int id) {
+	public static void empty(int id) {
 		DateFormat df = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
 		Calendar calobj = Calendar.getInstance();
 		String timestamp = df.format(calobj.getTime());
@@ -188,5 +188,23 @@ public class StatCalculator {
 			e.printStackTrace();
 		}
 		return time;
+	}
+	
+	public static void resetData(int id) {
+		FileWriter fw1 = null, fw2 = null;
+		try {
+			fw1 = new FileWriter("src/data/RCM-" + id + ".txt", false);
+			fw2 = new FileWriter("src/data/RCM-" + id + "Empty.txt", false);
+		    fw1.write("");
+		    fw2.write("");
+		    fw1.close();
+		    fw2.close();
+		} catch (IOException e) {
+		    System.out.println(e);
+		}
+	}
+	
+	public static void main(String args[]) {
+		StatCalculator.resetData(0);
 	}
 }
