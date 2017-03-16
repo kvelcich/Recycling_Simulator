@@ -69,6 +69,10 @@ public class RCM {
     	return totalOwed;
     }
     
+    public void addRecyclableItem(Recyclable recyclable) {
+    	recyclableList.add(recyclable);
+    }
+    
     public void setRecyclableList(ArrayList<Recyclable> recyclableList) {
         this.recyclableList = recyclableList;
     }
