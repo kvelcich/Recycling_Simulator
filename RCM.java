@@ -79,7 +79,7 @@ public class RCM {
 
     public void recycleItem(Recyclable recyclable) {
     	//TODO: CHECK IF RECYCLABLE IS ACCEPTED
-        double weight = recyclable.generate();
+        double weight = recyclable.generateWeight();
         if (capacity + weight <= MAX_CAPACITY) {
         	lastRecycled = recyclable;
         	lastWeight = weight;

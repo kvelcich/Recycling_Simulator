@@ -11,7 +11,7 @@ public class Recyclable {
         this.relativeWeight = relativeWeight;
     }
 
-    public double generate() {
+    public double generateWeight() {
         Random r = new Random();
         double randomVal = 0.5 + r.nextDouble();
         return randomVal*relativeWeight;
