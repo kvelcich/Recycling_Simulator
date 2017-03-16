@@ -11,8 +11,10 @@ public class RCM {
 
     private double capacity;
     private final double MAX_CAPACITY;
-
-    private StatCalculator statCalculator;
+    
+    //Session Variables
+    private Recyclable lastRecycled;
+    private double lastWeight;
 
 
     public RCM(int id, String location, double capacity, Money money) {
@@ -26,8 +28,6 @@ public class RCM {
 
         this.capacity = 0;
         this.MAX_CAPACITY = capacity;
-
-        statCalculator = new StatCalculator();
     }
 
     public int getId() {
@@ -45,21 +45,39 @@ public class RCM {
     public double getCapacity() {
         return capacity;
     }
+    
+    public ArrayList<Recyclable> getRecyclableList() {
+    	return recyclableList;
+    }
 
     public double getAvailableCapacity() {
         return MAX_CAPACITY - capacity;
     }
 
+    public String getLastType() {
+    	return lastRecycled.getType();
+    }
+    
+    public double getLastWeight() {
+    	return lastWeight;
+    }
+    
+    public Money getLastPrice() {
+    	return new Money(0, (int)(lastWeight * lastRecycled.getPricePerPound()));
+    }
+    
     public void setRecyclableList(ArrayList<Recyclable> recyclableList) {
         this.recyclableList = recyclableList;
     }
 
     public void recycleItem(Recyclable recyclable) {
+    	//TODO: CHECK IF RECYCLABLE IS ACCEPTED
         double weight = recyclable.generate();
         if (capacity + weight <= MAX_CAPACITY) {
+        	lastRecycled = recyclable;
+        	lastWeight = weight;
             capacity += weight;
             totalDue.addTo(0, (int) (weight * recyclable.getPricePerPound()));
-            statCalculator.addRecyclable(recyclable.getType(), weight);
         } else {
             checkout();
         }
