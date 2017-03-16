@@ -5,7 +5,7 @@ public class RCM {
     private String location;
     private ArrayList<Recyclable> recyclableList;
 
-    private Money totalDue;
+    private Money totalOwed;
     private Money remaining;
     private final Money MAX_MONEY;
 
@@ -15,14 +15,13 @@ public class RCM {
     //Session Variables
     private Recyclable lastRecycled;
     private double lastWeight;
-
-
+    
     public RCM(int id, String location, double capacity, Money money) {
         this.id = id;
         this.location = location;
         recyclableList = new ArrayList<Recyclable>();
 
-        totalDue = new Money();
+        totalOwed = new Money();
         remaining = money;
         MAX_MONEY = money.clone();
 
@@ -66,8 +65,8 @@ public class RCM {
     	return new Money(0, (int)(lastWeight * lastRecycled.getPricePerPound()));
     }
     
-    public Money getTotalDue() {
-    	return totalDue;
+    public Money getTotalOwed() {
+    	return totalOwed;
     }
     
     public void setRecyclableList(ArrayList<Recyclable> recyclableList) {
@@ -81,19 +80,18 @@ public class RCM {
         	lastRecycled = recyclable;
         	lastWeight = weight;
             capacity += weight;
-            totalDue.addTo(0, (int) (weight * recyclable.getPricePerPound()));
+            totalOwed.addTo(0, (int) (weight * recyclable.getPricePerPound()));
         } else {
             checkout();
         }
     }
 
     public Receipt checkout() {
-    	lastWeight = 0;
-        if (remaining.sufficientFunds(totalDue)) {
-            remaining.subtract(totalDue);
-            return new Receipt(totalDue, true);
+        if (remaining.sufficientFunds(totalOwed)) {
+            remaining.subtract(totalOwed);
+            return new Receipt(totalOwed, true);
         } else
-            return new Receipt(totalDue, false);
+            return new Receipt(totalOwed, false);
     }
 
     public void empty() {
