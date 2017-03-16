@@ -5,6 +5,12 @@ public class Recyclable {
     private double pricePerPound;
     private double relativeWeight;
 
+    public Recyclable(String type, double pricePerPound) {
+        this.type = type;
+        this.pricePerPound = pricePerPound;
+        this.relativeWeight = 1;
+    }
+
     public Recyclable(String type, double pricePerPound, double relativeWeight) {
         this.type = type;
         this.pricePerPound = pricePerPound;

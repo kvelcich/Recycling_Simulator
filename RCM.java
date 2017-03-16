@@ -15,7 +15,7 @@ public class RCM {
     //Session Variables
     private Recyclable lastRecycled;
     private double lastWeight;
-    
+
     public RCM(int id, String location, double capacity, Money money) {
         this.id = id;
         this.location = location;
@@ -31,6 +31,10 @@ public class RCM {
 
     public int getId() {
         return id;
+    }
+
+    public double getMAX_CAPACITY() {
+        return MAX_CAPACITY;
     }
 
     public String getLocation() {
@@ -51,6 +55,21 @@ public class RCM {
 
     public double getAvailableCapacity() {
         return MAX_CAPACITY - capacity;
+    }
+
+    public Recyclable getRecyclable(String type) {
+        for (Recyclable recyclable: recyclableList)
+            if (recyclable.getType().equals(type))
+                return recyclable;
+        return null;
+    }
+
+    public void pay() {
+        if (getMoney().sufficientFunds(totalOwed)) {
+            remaining = remaining.subtract(totalOwed);
+        }
+        totalOwed.setDollars(0);
+        totalOwed.setCents(0);
     }
 
     public String getLastType() {
@@ -77,17 +96,17 @@ public class RCM {
         this.recyclableList = recyclableList;
     }
 
-    public void recycleItem(Recyclable recyclable) {
-    	//TODO: CHECK IF RECYCLABLE IS ACCEPTED
+    public boolean recycleItem(Recyclable recyclable) {
         double weight = recyclable.generateWeight();
-        if (capacity + weight <= MAX_CAPACITY) {
+        if (sufficientCapacity(weight)) {
         	lastRecycled = recyclable;
         	lastWeight = weight;
-            capacity += weight;
+            addCapacity(weight);
             totalOwed.addTo(0, (int) (weight * recyclable.getPricePerPound()));
             StatCalculator.itemRecycled(id, recyclable, weight);
+            return true;
         } else {
-            checkout();
+            return false;
         }
     }
 
@@ -100,12 +119,9 @@ public class RCM {
     		capacity += weight;
     }
     
-    public Receipt checkout() {
-        if (remaining.sufficientFunds(totalOwed)) {
-            remaining.subtract(totalOwed);
-            return new Receipt(totalOwed, true);
-        } else
-            return new Receipt(totalOwed, false);
+    public void checkout() {
+        totalOwed.setDollars(0);
+        totalOwed.setCents(0);
     }
 
     public void empty() {
@@ -148,5 +164,9 @@ public class RCM {
     
     public int numItemInTimeFrame(int timeFrame) {
     	return StatCalculator.numItemInTimeFrame(id, timeFrame);
+    }
+
+    public int getNumItems() {
+        return StatCalculator.getNumItems(id);
     }
 }

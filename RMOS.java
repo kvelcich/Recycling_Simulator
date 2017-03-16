@@ -9,12 +9,19 @@ public class RMOS {
         recyclableList = new ArrayList<Recyclable>();
     }
 
+    public ArrayList<RCM> getRCMList() {
+        return RCMList;
+    }
+
     public void addRCM(RCM RCMMachine) {
         RCMList.add(RCMMachine);
         RCMList.get(RCMList.size() - 1).setRecyclableList(recyclableList);
     }
 
     public void addRecyclable(Recyclable recyclable) {
+        for (Recyclable r: recyclableList)
+            if (r.getType().equals(recyclable.getType()))
+                return;
         recyclableList.add(recyclable);
         updateRCMRecyclables();
     }

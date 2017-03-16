@@ -1,47 +1,56 @@
 import javax.swing.*;
+import javax.xml.crypto.Data;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class RCMFrame extends JFrame {
-    JButton weight, value, item, empty, day, week, month, year;
+public class RCMFrame extends JPanel implements ActionListener {
+    private JButton weight, value, item, empty, day, week, month, year;
+    private BarChart chart;
+    private DataManager datamanager;
+    private ArrayList<RCM> rcmList;
+    private CardLayout cardLayout;
+    private JPanel chartContainer;
 
-    public RCMFrame() {
-        super("RCM Frame");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        Container container = getContentPane();
-        container.setLayout(new BorderLayout());
+    private int type = DataManager.WEIGHT;
+    private int time = DataManager.YEAR;
+    Container container;
 
-        setLocationRelativeTo(null);
+
+    public RCMFrame(ArrayList<RCM> rcmList) {
+        setLayout(new BorderLayout());
+
         setSize(500, 500);
-        setVisible(true);
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        RCM r1 = new RCM(1, "SJ", 10, new Money(50, 0));
-        RCM r2 = new RCM(2, "SJ", 10, new Money(50, 0));
-        RCM r3 = new RCM(3, "SJ", 10, new Money(50, 0));
-        RCM r4 = new RCM(4, "SJ", 10, new Money(50, 0));
-        RCM r5 = new RCM(5, "SJ", 10, new Money(50, 0));
+        this.rcmList = rcmList;
 
-        ArrayList<RCM> rcmList = new ArrayList<RCM>();
-        rcmList.add(r1);
-        rcmList.add(r2);
-        rcmList.add(r3);
-        rcmList.add(r4);
-        rcmList.add(r5);
+        datamanager = new DataManager();
+        datamanager.readDataFromFile(rcmList, type, time);
 
-        DataManager datamanager = new DataManager();
-        datamanager.readDataFromFile(rcmList, DataManager.ITEM, DataManager.YEAR);
+        chartContainer = new JPanel();
+        cardLayout = new CardLayout();
+        chartContainer.setLayout(cardLayout);
 
-        BarChart chart = new BarChart(datamanager.getData());
-        chart.setVisible(true);
-        container.add(chart, BorderLayout.CENTER);
+        chart = new BarChart(datamanager.getData());
+        chartContainer.add(chart, BorderLayout.CENTER);
+        add(chartContainer);
 
         weight = new JButton("Weight");
+        weight.setActionCommand("Weight");
+        weight.addActionListener(this);
         value = new JButton("Value");
-        item = new JButton("Item");
+        value.setActionCommand("Value");
+        value.addActionListener(this);
+        item = new JButton("Items");
+        item.setActionCommand("Items");
+        item.addActionListener(this);
         empty = new JButton("Empty");
+        empty.setActionCommand("Empty");
+        empty.addActionListener(this);
 
         JPanel graphType = new JPanel();
         graphType.setLayout(new BoxLayout(graphType, BoxLayout.Y_AXIS));
@@ -50,12 +59,20 @@ public class RCMFrame extends JFrame {
         graphType.add(item);
         graphType.add(empty);
 
-        container.add(graphType, BorderLayout.WEST);
+        add(graphType, BorderLayout.WEST);
 
         day = new JButton("Day");
+        day.setActionCommand("Day");
+        day.addActionListener(this);
         week = new JButton("Week");
+        week.setActionCommand("Week");
+        week.addActionListener(this);
         month = new JButton("Month");
+        month.setActionCommand("Month");
+        month.addActionListener(this);
         year = new JButton("Year");
+        year.setActionCommand("Year");
+        year.addActionListener(this);
 
         JPanel graphTime = new JPanel();
         graphTime.setLayout(new BoxLayout(graphTime, BoxLayout.Y_AXIS));
@@ -64,46 +81,59 @@ public class RCMFrame extends JFrame {
         graphTime.add(month);
         graphTime.add(year);
 
-        container.add(graphTime, BorderLayout.EAST);
+        add(graphTime, BorderLayout.EAST);
 
         setVisible(true);
     }
 
-    public static void main(String args[]) {
-        new RCMFrame();
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "Weight":
+                type = DataManager.WEIGHT;
+                break;
+            case "Value":
+                type = DataManager.VALUE;
+                break;
+            case "Items":
+                type = DataManager.ITEM;
+                break;
+            case "Empty":
+                type = DataManager.EMPTY;
+                break;
+            case "Day":
+                time = DataManager.DAY;
+                break;
+            case "Week":
+                time = DataManager.WEEK;
+                break;
+            case "Month":
+                time = DataManager.MONTH;
+                break;
+            case "Year":
+                time = DataManager.YEAR;
+                break;
+        }
+        datamanager.readDataFromFile(rcmList, type, time);
+        chart = new BarChart(datamanager.getData());
+        chartContainer.add(chart, "1");
+        cardLayout.show(chartContainer, "1");
     }
 
- //   public void
-}
+    public void update() {
+        datamanager.readDataFromFile(rcmList, type, time);
+        chart = new BarChart(datamanager.getData());
+        chartContainer.add(chart, "1");
+        cardLayout.show(chartContainer, "1");
+    }
 
-
-class hello {
-    public hello() {
+    public static void main(String args[]) {
         RCM r1 = new RCM(1, "SJ", 10, new Money(50, 0));
         RCM r2 = new RCM(2, "SJ", 10, new Money(50, 0));
-        RCM r3 = new RCM(3, "SJ", 10, new Money(50, 0));
-        RCM r4 = new RCM(4, "SJ", 10, new Money(50, 0));
-        RCM r5 = new RCM(5, "SJ", 10, new Money(50, 0));
-
 
         ArrayList<RCM> rcmList = new ArrayList<RCM>();
         rcmList.add(r1);
         rcmList.add(r2);
-        rcmList.add(r3);
-        rcmList.add(r4);
-        rcmList.add(r5);
 
-        JFrame frame = new JFrame("Bar Chart");
-        DataManager datamanager = new DataManager();
-        datamanager.readDataFromFile(rcmList, DataManager.ITEM, DataManager.YEAR);
-
-        BarChart chart = new BarChart(datamanager.getData());
-        chart.setSize(500, 400);
-
-        frame.setSize(600, 400);
-        frame.getContentPane().add(chart);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
+        new RCMFrame(rcmList);
     }
 }

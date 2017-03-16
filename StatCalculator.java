@@ -270,7 +270,21 @@ public class StatCalculator {
 		    System.out.println(e);
 		}
 	}
-	
+
+	public static int getNumItems(int id) {
+		int counter = 0;
+
+		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + "Empty.txt"))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				counter++;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return counter;
+	}
+
 	public static void main(String args[]) {
 		StatCalculator.resetData(0);
 	}
