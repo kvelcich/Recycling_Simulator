@@ -1,15 +1,17 @@
+package recycling.simulation.helper;
+
 public class Money {
     private int dollars;
     private int cents;
 
     /* Default constructor for Money. */
-    Money() {
+    public Money() {
         dollars = 0;
         cents = 0;
     }
 
     /* Constructor for Money, where dollars and cents are given */
-    Money(int dollars, int cents) {
+    public Money(int dollars, int cents) {
         /* Converting cents to dollars */
         dollars += cents / 100;
         cents %= 100;

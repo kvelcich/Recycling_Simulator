@@ -1,3 +1,9 @@
+package recycling.simulation.rmos;
+
+import recycling.simulation.helper.Money;
+import recycling.simulation.helper.Recyclable;
+import recycling.simulation.rcm.RCM;
+
 import java.util.ArrayList;
 
 public class RMOS {

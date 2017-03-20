@@ -1,11 +1,15 @@
+package recycling.simulation.gui;
+
+import recycling.simulation.helper.Money;
+import recycling.simulation.rcm.RCM;
+
 import javax.swing.*;
-import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class RCMFrame extends JPanel implements ActionListener {
+public class RCMGraphFrame extends JPanel implements ActionListener {
     private JButton weight, value, item, empty, day, week, month, year;
     private BarChart chart;
     private DataManager datamanager;
@@ -18,7 +22,7 @@ public class RCMFrame extends JPanel implements ActionListener {
     Container container;
 
 
-    public RCMFrame(ArrayList<RCM> rcmList) {
+    public RCMGraphFrame(ArrayList<RCM> rcmList) {
         setLayout(new BorderLayout());
 
         setSize(500, 500);
@@ -39,6 +43,7 @@ public class RCMFrame extends JPanel implements ActionListener {
         chartContainer.add(chart, BorderLayout.CENTER);
         add(chartContainer);
 
+        JLabel graphTypeLabel = new JLabel("Change Graph Param:");
         weight = new JButton("Weight");
         weight.setActionCommand("Weight");
         weight.addActionListener(this);
@@ -53,7 +58,8 @@ public class RCMFrame extends JPanel implements ActionListener {
         empty.addActionListener(this);
 
         JPanel graphType = new JPanel();
-        graphType.setLayout(new BoxLayout(graphType, BoxLayout.Y_AXIS));
+        graphType.setLayout(new GridLayout(0, 1));
+        graphType.add(graphTypeLabel);
         graphType.add(weight);
         graphType.add(value);
         graphType.add(item);
@@ -61,6 +67,7 @@ public class RCMFrame extends JPanel implements ActionListener {
 
         add(graphType, BorderLayout.WEST);
 
+        JLabel timeLabel = new JLabel("Change Time Length: ");
         day = new JButton("Day");
         day.setActionCommand("Day");
         day.addActionListener(this);
@@ -75,7 +82,8 @@ public class RCMFrame extends JPanel implements ActionListener {
         year.addActionListener(this);
 
         JPanel graphTime = new JPanel();
-        graphTime.setLayout(new BoxLayout(graphTime, BoxLayout.Y_AXIS));
+        graphTime.setLayout(new GridLayout(0, 1));
+        graphTime.add(timeLabel);
         graphTime.add(day);
         graphTime.add(week);
         graphTime.add(month);
@@ -124,16 +132,5 @@ public class RCMFrame extends JPanel implements ActionListener {
         chart = new BarChart(datamanager.getData());
         chartContainer.add(chart, "1");
         cardLayout.show(chartContainer, "1");
-    }
-
-    public static void main(String args[]) {
-        RCM r1 = new RCM(1, "SJ", 10, new Money(50, 0));
-        RCM r2 = new RCM(2, "SJ", 10, new Money(50, 0));
-
-        ArrayList<RCM> rcmList = new ArrayList<RCM>();
-        rcmList.add(r1);
-        rcmList.add(r2);
-
-        new RCMFrame(rcmList);
     }
 }

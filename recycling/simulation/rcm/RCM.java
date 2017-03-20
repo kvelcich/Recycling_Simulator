@@ -1,3 +1,9 @@
+package recycling.simulation.rcm;
+
+import recycling.simulation.helper.Money;
+import recycling.simulation.helper.Recyclable;
+import recycling.simulation.helper.StatCalculator;
+
 import java.util.ArrayList;
 
 public class RCM {

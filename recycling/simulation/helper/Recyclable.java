@@ -1,3 +1,5 @@
+package recycling.simulation.helper;
+
 import java.util.Random;
 
 public class Recyclable {

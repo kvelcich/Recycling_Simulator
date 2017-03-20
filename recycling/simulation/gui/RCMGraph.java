@@ -1,3 +1,8 @@
+package recycling.simulation.gui;
+
+import recycling.simulation.helper.StatCalculator;
+import recycling.simulation.rcm.RCM;
+
 import java.awt.*;
 import java.io.BufferedReader;
 import java.io.File;

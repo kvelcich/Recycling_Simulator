@@ -1,9 +1,6 @@
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
+package recycling.simulation.helper;
+
+import java.io.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,7 +24,7 @@ public class StatCalculator {
 		
 		FileWriter fw = null;
 		try {
-		    fw = new FileWriter("src/data/RCM-" + id + ".txt", true);
+		    fw = new FileWriter("resources/RCM-" + id + ".txt", true);
 		    fw.write(line);
 		    fw.close();
 		} catch (IOException e) {
@@ -38,7 +35,7 @@ public class StatCalculator {
 	public static int numSpecItemInTimeFrame(int id, String type, int timeFrame) {
 		int counter = 0;
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + ".txt"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
 		    	String[] parts = line.split("-");
@@ -71,7 +68,7 @@ public class StatCalculator {
 	public static int numItemInTimeFrame(int id, int timeFrame) {
 		int counter = 0;
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + ".txt"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
 		    	String[] parts = line.split("-");
@@ -103,7 +100,7 @@ public class StatCalculator {
 	
 	public static int getCompleteWeight(int id) {
 		int counter = 0;
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + ".txt"))) {
 		    String line;
 		    while ((line = br.readLine()) != null)
 		    		counter++;
@@ -116,7 +113,7 @@ public class StatCalculator {
 	public static double getWeightInTimeFrame(int id, int timeFrame) {
 		double weight = 0;
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + ".txt"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
 		    	String[] parts = line.split("-");
@@ -149,7 +146,7 @@ public class StatCalculator {
 	public static Money totalMoneyIssued(int id) {
 		Money total = new Money();
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + ".txt"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
 		    	String[] parts = line.split("-");
@@ -164,7 +161,7 @@ public class StatCalculator {
 	public static Money getMoneyInTimeFrame(int id, int timeFrame) {
 		Money total = new Money();
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + ".txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + ".txt"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
 		    	String[] parts = line.split("-");
@@ -204,7 +201,7 @@ public class StatCalculator {
 		
 		FileWriter fw = null;
 		try {
-		    fw = new FileWriter("src/data/RCM-" + id + "Empty.txt", true);
+		    fw = new FileWriter("resources/RCM-" + id + "Empty.txt", true);
 		    fw.write(line);
 		    fw.close();
 		} catch (IOException e) {
@@ -215,7 +212,7 @@ public class StatCalculator {
 	public static int getEmptyInTimeFrame(int id, int timeFrame) {
 		int counter = 0;
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + "Empty.txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + "Empty.txt"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
 				DateFormat format = new SimpleDateFormat("MM/dd/yy HH:mm:ss");
@@ -246,7 +243,7 @@ public class StatCalculator {
 	public static String getLastEmpty(int id) {
 		String time = "";
 		
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + "Empty.txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + "Empty.txt"))) {
 		    String line;
 		    while ((line = br.readLine()) != null) {
 		    	time = line;
@@ -260,8 +257,8 @@ public class StatCalculator {
 	public static void resetData(int id) {
 		FileWriter fw1 = null, fw2 = null;
 		try {
-			fw1 = new FileWriter("src/data/RCM-" + id + ".txt", false);
-			fw2 = new FileWriter("src/data/RCM-" + id + "Empty.txt", false);
+			fw1 = new FileWriter("resources/RCM-" + id + ".txt", false);
+			fw2 = new FileWriter("resources/RCM-" + id + "Empty.txt", false);
 		    fw1.write("");
 		    fw2.write("");
 		    fw1.close();
@@ -274,7 +271,7 @@ public class StatCalculator {
 	public static int getNumItems(int id) {
 		int counter = 0;
 
-		try (BufferedReader br = new BufferedReader(new FileReader("src/data/RCM-" + id + "Empty.txt"))) {
+		try (BufferedReader br = new BufferedReader(new FileReader("resources/RCM-" + id + ".txt"))) {
 			String line;
 			while ((line = br.readLine()) != null) {
 				counter++;
@@ -283,9 +280,5 @@ public class StatCalculator {
 			e.printStackTrace();
 		}
 		return counter;
-	}
-
-	public static void main(String args[]) {
-		StatCalculator.resetData(0);
 	}
 }
