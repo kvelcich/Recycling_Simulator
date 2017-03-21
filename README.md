@@ -1,6 +1,6 @@
 # Recycling Simulator
 
-Created by: Kevin Velcich and Kevin Velcich
+Created by: Kevin Velcich and Griffin Moede
 
 Screenshots of program running are found in the the 'Screenshots folder'
 
