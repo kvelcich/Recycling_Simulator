@@ -1,22 +1,16 @@
-package recycling.simulation.helper;
+package recycling.simulation.rcm;
 
-public class dataMember {
-    private int id;
+public class rcmData {
     private String time;
     private String type;
     private double weight;
     private double price;
 
-    public dataMember(int id, String time, String type, double weight, double price) {
-        this.id = id;
+    public rcmData(String time, String type, double weight, double price) {
         this.time = time;
         this.type = type;
         this.weight = weight;
         this.price = price;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getTime() {

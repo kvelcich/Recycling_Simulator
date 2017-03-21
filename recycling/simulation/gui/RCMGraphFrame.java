@@ -33,7 +33,7 @@ public class RCMGraphFrame extends JPanel implements ActionListener {
         this.rcmList = rcmList;
 
         datamanager = new DataManager();
-        datamanager.readDataFromFile(rcmList, type, time);
+        datamanager.readData(rcmList, type, time);
 
         chartContainer = new JPanel();
         cardLayout = new CardLayout();
@@ -121,14 +121,14 @@ public class RCMGraphFrame extends JPanel implements ActionListener {
                 time = DataManager.YEAR;
                 break;
         }
-        datamanager.readDataFromFile(rcmList, type, time);
+        datamanager.readData(rcmList, type, time);
         chart = new BarChart(datamanager.getData());
         chartContainer.add(chart, "1");
         cardLayout.show(chartContainer, "1");
     }
 
     public void update() {
-        datamanager.readDataFromFile(rcmList, type, time);
+        datamanager.readData(rcmList, type, time);
         chart = new BarChart(datamanager.getData());
         chartContainer.add(chart, "1");
         cardLayout.show(chartContainer, "1");

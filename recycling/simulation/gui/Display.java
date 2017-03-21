@@ -2,7 +2,6 @@ package recycling.simulation.gui;
 
 import recycling.simulation.helper.Money;
 import recycling.simulation.helper.Recyclable;
-import recycling.simulation.helper.StatCalculator;
 import recycling.simulation.rcm.RCM;
 import recycling.simulation.rmos.RMOS;
 
@@ -52,7 +51,11 @@ public class Display extends JFrame implements ActionListener {
         JPanel rcmPanel = new JPanel();
         rcmPanel.setLayout(new BoxLayout(rcmPanel, BoxLayout.X_AXIS));
 
+
         /* RCM 1 Panel */
+        RCMPanel rcmPanel1 = new RCMPanel(rcm1);
+        rcmPanel.add(rcmPanel1);
+
         rcm1Panel = new JPanel();
         rcm1Panel.setLayout(new BoxLayout(rcm1Panel, BoxLayout.Y_AXIS));
         JLabel idLabel1 = new JLabel("RCM " + rcm1.getId());
@@ -243,11 +246,15 @@ public class Display extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!addField.getText().equals("") && !priceField.getText().equals("")) {
-                    rmos.addRecyclable(new Recyclable(addField.getText(), Integer.parseInt(priceField.getText())));
-                    setButtonPanel(1);
-                    setButtonPanel(2);
-                    addField.setText("");
-                    priceField.setText("");
+                    try {
+                        rmos.addRecyclable(new Recyclable(addField.getText(), Integer.parseInt(priceField.getText())));
+                        setButtonPanel(1);
+                        setButtonPanel(2);
+                        addField.setText("");
+                        priceField.setText("");
+                    } catch (Exception exception) {
+                        JOptionPane.showMessageDialog(null, "Please enter a valid input");
+                    }
                 }
             }
         });
@@ -293,12 +300,16 @@ public class Display extends JFrame implements ActionListener {
         changeBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!changeField.getText().equals("") && !changePriceField.getText().equals(""))
-                    rmos.setRecyclablePrice(changeField.getText(), Integer.parseInt(changePriceField.getText()));
+                try {
+                    if (!changeField.getText().equals("") && !changePriceField.getText().equals(""))
+                        rmos.setRecyclablePrice(changeField.getText(), Integer.parseInt(changePriceField.getText()));
                     setButtonPanel(1);
                     setButtonPanel(2);
                     changeField.setText("");
                     changePriceField.setText("");
+                } catch (Exception exception) {
+                    JOptionPane.showMessageDialog(null, "Please enter a valid input");
+                }
             }
         });
         changeRecyclable.add(changeLabel);
@@ -364,7 +375,7 @@ public class Display extends JFrame implements ActionListener {
             case 1:
                 if(rcm1.recycleItem(rcm1.getRecyclable(split[1]))) {
                     //Item is recycled.
-                    update(1);
+                    //update(1);
                 } else {
                     checkout(1, true);
                 }
@@ -372,35 +383,12 @@ public class Display extends JFrame implements ActionListener {
             case 2:
                 if(rcm2.recycleItem(rcm2.getRecyclable(split[1]))) {
                     //Item is recycled.
-                    update(2);
+                    //update(2);
                 } else {
                     checkout(2, true);
                 }
                 break;
         }
-    }
-
-    private void update(int id) {
-        switch (id) {
-            case 1:
-                receipt1Label.setText("");
-                rmosFillRCMText(1);
-                type1Label.setText("Type: " + rcm1.getLastType());
-                weight1Label.setText("Weight: " + rcm1.getLastWeight() + " lbs");
-                money1Label.setText("Money: " + rcm1.getLastPrice());
-                total1Label.setText("Total: " + rcm1.getTotalOwed());
-                break;
-            case 2:
-                receipt2Label.setText("");
-                rmosFillRCMText(2);
-                type2Label.setText("Type: " + rcm2.getLastType());
-                weight2Label.setText("Weight: " + rcm2.getLastWeight() + " lbs");
-                money2Label.setText("Money: " + rcm2.getLastPrice());
-                total2Label.setText("Total: " + rcm2.getTotalOwed());
-                break;
-        }
-        rcmGraphFrame.update();
-        mostUsed();
     }
 
     private void checkout(int id, boolean capacity) {
@@ -412,9 +400,8 @@ public class Display extends JFrame implements ActionListener {
                     receipt1Label.setText("RECEIPT ISSUED: " + rcm1.getTotalOwed());
                 resetLabel(1);
                 rcm1.pay();
-                //TODO:
-                //if (capacity)
-                //   receipt1Label.add("\nCAPACITY IS FULL");
+                if (capacity)
+                    JOptionPane.showMessageDialog(null, "Sorry, the RCM is full");
                 rmosFillRCMText(1);
                 break;
             case 2:
@@ -425,9 +412,8 @@ public class Display extends JFrame implements ActionListener {
                 resetLabel(2);
                 rcm2.pay();
                 receipt2Label.setBackground(Color.green);
-                //TODO:
-                //if (capacity)
-                //   receipt1Label.add("\nCAPACITY IS FULL");
+                if (capacity)
+                    JOptionPane.showMessageDialog(null, "Sorry, the RCM is full");
                 rmosFillRCMText(2);
                 break;
         }
@@ -455,30 +441,123 @@ public class Display extends JFrame implements ActionListener {
             case 1:
                 rmosMoney1.setText("Money: " + rcm1.getMoney());
                 rmosCapacity1.setText("Capacity: " + rcm1.getCapacity() + " / " + rcm1.getMAX_CAPACITY());
-                lastEmptied1.setText("Last Emptied: " + rcm1.getLastEmpty());
+                lastEmptied1.setText("Last Emptied: " + rcm1.stats().getLastEmpty());
                 break;
             case 2:
                 rmosMoney2.setText("Money: " + rcm2.getMoney());
                 rmosCapacity2.setText("Capacity: " + rcm2.getCapacity() + " / " + rcm2.getMAX_CAPACITY());
-                lastEmptied2.setText("Last Emptied: " + rcm2.getLastEmpty());
+                lastEmptied2.setText("Last Emptied: " + rcm2.stats().getLastEmpty());
                 break;
         }
     }
 
     private void mostUsed() {
         mostUsed.setFont(new Font("Arial", Font.BOLD, 18));
-        if (rcm1.getNumItems() >= rcm2.getNumItems())
+        if (rcm1.stats().getNumItems() >= rcm2.stats().getNumItems())
             mostUsed.setText("\n\n\nMost Used: RCM " + rcm1.getId() + ", location: " + rcm1.getLocation());
         else
             mostUsed.setText("\n\n\nMost Used: RCM " + rcm2.getId() + ", location: " + rcm2.getLocation());
     }
 
+    class RCMPanel extends JPanel implements ActionListener {
+        RCM rcm;
+
+        JPanel buttonPanel, buttons;
+        CardLayout cardLayout;
+        ArrayList<JButton> buttonList;
+        JLabel typeLabel, weightLabel, moneyLabel, totalLabel, receiptLabel;
+
+        RCMPanel(RCM rcm) {
+            this.rcm = rcm;
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+
+
+            JLabel idLabel = new JLabel("RCM " + rcm.getId());
+            idLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            idLabel.setFont(new Font("Arial", Font.BOLD, 22));
+            JLabel locationLabel = new JLabel("Location: " + rcm.getLocation());
+            locationLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+            add(idLabel);
+            add(locationLabel);
+
+            buttonPanel = new JPanel();
+            cardLayout = new CardLayout();
+            buttonPanel.setLayout(cardLayout);
+            buttonPanel.setBorder(new EmptyBorder(25, 0, 50, 0));
+            buttonList = new ArrayList<JButton>();
+            setButtonPanel();
+            add(buttonPanel);
+
+            JButton checkout = new JButton("Checkout");
+            checkout.setAlignmentX(Component.CENTER_ALIGNMENT);
+            checkout.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    checkout(false);
+                }
+            });
+            add(checkout);
+
+            JPanel receiptPanel = new JPanel();
+            receiptPanel.setLayout(new GridLayout(0, 1));
+            typeLabel = new JLabel(" ");
+            weightLabel = new JLabel(" ");
+            moneyLabel = new JLabel(" ");
+            totalLabel = new JLabel(" ");
+            receiptLabel = new JLabel(" ");
+            receiptPanel.add(typeLabel);
+            receiptPanel.add(weightLabel);
+            receiptPanel.add(moneyLabel);
+            receiptPanel.add(totalLabel);
+            receiptPanel.add(receiptLabel);
+            add(receiptPanel);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            String action = e.getActionCommand();
+            if (rcm.recycleItem(rcm.getRecyclable(action)))
+                update();
+        }
+
+        private void update() {
+            receiptLabel.setText("");
+            rmosFillRCMText(1);
+            typeLabel.setText("Type: " + rcm1.getLastType());
+            weightLabel.setText("Weight: " + rcm1.getLastWeight() + " lbs");
+            moneyLabel.setText("Money: " + rcm1.getLastPrice());
+            totalLabel.setText("Total: " + rcm1.getTotalOwed());
+            rcmGraphFrame.update();
+            mostUsed();
+        }
+
+        private void setButtonPanel() {
+            buttons = new JPanel();
+            buttons.setLayout(new GridLayout(0, 1));
+            for (Recyclable recyclable: rcm.getRecyclableList()) {
+                buttonList.clear();
+                buttonList.add(new JButton(recyclable.getType() + " - " + (int)recyclable.getPricePerPound() + " cents per pound"));
+                buttonList.get(buttonList.size() - 1).setActionCommand("1-"+recyclable.getType());
+                buttonList.get(buttonList.size() - 1).addActionListener(this);
+                buttons.add(buttonList.get(buttonList.size()-1));
+            }
+            buttonPanel.add(buttons, "1");
+            cardLayout.show(buttonPanel, "1");
+        }
+
+        private void checkout(boolean capacity) {
+            if (rcm.getMoney().sufficientFunds(rcm.getTotalOwed()))
+                receiptLabel.setText("MONEY ISSUED: " + rcm1.getTotalOwed());
+            else
+                receipt1Label.setText("RECEIPT ISSUED: " + rcm1.getTotalOwed());
+            resetLabel(1);
+            rcm1.pay();
+            if (capacity)
+                JOptionPane.showMessageDialog(null, "Sorry, the RCM is full");
+            rmosFillRCMText(1);
+        }
+    }
+
     public static void main(String args[]) {
-        StatCalculator.resetData(1);
-        StatCalculator.resetData(2);
         new Display();
     }
 }
-
-//TODO: error cases for fill in
-//TODO: add different recyclables for each RCM

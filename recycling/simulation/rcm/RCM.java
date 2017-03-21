@@ -2,11 +2,13 @@ package recycling.simulation.rcm;
 
 import recycling.simulation.helper.Money;
 import recycling.simulation.helper.Recyclable;
-import recycling.simulation.helper.StatCalculator;
+import recycling.simulation.helper.StatCalc;
 
 import java.util.ArrayList;
 
 public class RCM {
+    StatCalc statCalc;
+
     private int id;
     private String location;
     private ArrayList<Recyclable> recyclableList;
@@ -23,6 +25,8 @@ public class RCM {
     private double lastWeight;
 
     public RCM(int id, String location, double capacity, Money money) {
+        statCalc = new StatCalc();
+
         this.id = id;
         this.location = location;
         recyclableList = new ArrayList<Recyclable>();
@@ -109,7 +113,7 @@ public class RCM {
         	lastWeight = weight;
             addCapacity(weight);
             totalOwed.addTo(0, (int) (weight * recyclable.getPricePerPound()));
-            StatCalculator.itemRecycled(id, recyclable, weight);
+            statCalc.itemRecycled(recyclable, weight);
             return true;
         } else {
             return false;
@@ -132,47 +136,14 @@ public class RCM {
 
     public void empty() {
         capacity = 0;
-        StatCalculator.empty(id);
+        statCalc.empty();
     }
 
     public void restockMoney() {
         remaining = MAX_MONEY.clone();
     }
-    
-    /* Stat Calculator Functions */
-    public int numSpecItemPerTimeFrame(Recyclable recyclable, int timeFrame) {
-    	return StatCalculator.numSpecItemInTimeFrame(id, recyclable.getType(), timeFrame);
-    }
-    
-    public double getCompleteWeight() {
-    	return StatCalculator.getCompleteWeight(id);
-    }
-    
-    public double getWeightInTimeFrame(int timeFrame) {
-    	return StatCalculator.getWeightInTimeFrame(id, timeFrame);
-    }
 
-    public Money getTotalMoneyIssued() {
-    	return StatCalculator.totalMoneyIssued(id);
-    }
-    
-    public int getEmptyInTimeFrame(int timeFrame) {
-    	return StatCalculator.getEmptyInTimeFrame(id, timeFrame);
-    }
-    
-    public String getLastEmpty() {
-    	return StatCalculator.getLastEmpty(id);
-    }
-    
-    public Money getMoneyInTimeFrame(int timeFrame) {
-    	return StatCalculator.getMoneyInTimeFrame(id, timeFrame);
-    }
-    
-    public int numItemInTimeFrame(int timeFrame) {
-    	return StatCalculator.numItemInTimeFrame(id, timeFrame);
-    }
-
-    public int getNumItems() {
-        return StatCalculator.getNumItems(id);
+    public StatCalc stats() {
+        return statCalc;
     }
 }

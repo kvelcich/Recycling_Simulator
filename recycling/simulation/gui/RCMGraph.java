@@ -1,14 +1,9 @@
 package recycling.simulation.gui;
 
-import recycling.simulation.helper.StatCalculator;
+import recycling.simulation.helper.StatCalc;
 import recycling.simulation.rcm.RCM;
 
 import java.awt.*;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -38,44 +33,43 @@ class DataManager {
 	public static final int ITEM = 2;
 	public static final int EMPTY = 3;
 	
-	public static final int DAY = StatCalculator.DAY;
-	public static final int WEEK = StatCalculator.WEEK;
-	public static final int MONTH = StatCalculator.MONTH;
-	public static final int YEAR = StatCalculator.YEAR;
+	public static final int DAY = StatCalc.DAY;
+	public static final int WEEK = StatCalc.WEEK;
+	public static final int MONTH = StatCalc.MONTH;
+	public static final int YEAR = StatCalc.YEAR;
 	
 	private Map<Color, RCMGraph> values = new LinkedHashMap<Color, RCMGraph>();
 	
 	private Random randomGenerator = new Random();
 	private Color[] salesColors;
 
-	public void readDataFromFile(ArrayList<RCM> rcmList, int val, int timeFrame) {
+	public void readData(ArrayList<RCM> rcmList, int val, int timeFrame) {
 		values.clear();
 		for (RCM rcm: rcmList) {
-			// the String to int conversion happens here
 			double data = 0;
 			switch (val) {
 				case WEIGHT:
-					data = StatCalculator.getWeightInTimeFrame(rcm.getId(), timeFrame);
+					data = rcm.stats().getWeightInTimeFrame(timeFrame);
 					break;
 				case VALUE:
-					data = StatCalculator.getMoneyInTimeFrame(rcm.getId(), timeFrame).toCents();
+					data = rcm.stats().getMoneyInTimeFrame(timeFrame).toCents();
 					break;
 				case ITEM:
-					data = StatCalculator.numItemInTimeFrame(rcm.getId(), timeFrame);
+					data = rcm.stats().numItemInTimeFrame(timeFrame);
 					break;
 				case EMPTY:
-					data = StatCalculator.getEmptyInTimeFrame(rcm.getId(), timeFrame);
+					data = rcm.stats().getEmptyInTimeFrame(timeFrame);
 					break;
 			}
-			
+
 			int red = randomGenerator.nextInt(256);
 			int green = randomGenerator.nextInt(256);
 			int blue = randomGenerator.nextInt(256);
 			Color randomColor = new Color(red, green, blue);
-			
+
 			values.put(randomColor, new RCMGraph(data, rcm));
 		}
-    }
+	}
 
 	public Map<Color, RCMGraph> getData() {
 		return values;
