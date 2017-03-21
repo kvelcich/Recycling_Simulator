@@ -1,8 +1,7 @@
 package recycling.simulation.gui;
 
-import recycling.simulation.helper.Money;
-import recycling.simulation.rcm.RCM;
 
+import recycling.simulation.rcm.RCM;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -10,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class RCMGraphFrame extends JPanel implements ActionListener {
+    private JLabel titleLabel;
     private JButton weight, value, item, empty, day, week, month, year;
     private BarChart chart;
     private DataManager datamanager;
@@ -23,9 +23,16 @@ public class RCMGraphFrame extends JPanel implements ActionListener {
 
 
     public RCMGraphFrame(ArrayList<RCM> rcmList) {
-        setLayout(new BorderLayout());
-
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setSize(500, 500);
+
+        titleLabel = new JLabel("TEST");
+        updateTitle();
+        add(titleLabel);
+
+
+        JPanel graphPanel = new JPanel();
+        graphPanel.setLayout(new BorderLayout());
 
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
@@ -41,7 +48,7 @@ public class RCMGraphFrame extends JPanel implements ActionListener {
 
         chart = new BarChart(datamanager.getData());
         chartContainer.add(chart, BorderLayout.CENTER);
-        add(chartContainer);
+        graphPanel.add(chartContainer);
 
         JLabel graphTypeLabel = new JLabel("Change Graph Param:");
         weight = new JButton("Weight");
@@ -65,7 +72,7 @@ public class RCMGraphFrame extends JPanel implements ActionListener {
         graphType.add(item);
         graphType.add(empty);
 
-        add(graphType, BorderLayout.WEST);
+        graphPanel.add(graphType, BorderLayout.WEST);
 
         JLabel timeLabel = new JLabel("Change Time Length: ");
         day = new JButton("Day");
@@ -89,7 +96,9 @@ public class RCMGraphFrame extends JPanel implements ActionListener {
         graphTime.add(month);
         graphTime.add(year);
 
-        add(graphTime, BorderLayout.EAST);
+        graphPanel.add(graphTime, BorderLayout.EAST);
+
+        add(graphPanel);
 
         setVisible(true);
     }
@@ -121,16 +130,49 @@ public class RCMGraphFrame extends JPanel implements ActionListener {
                 time = DataManager.YEAR;
                 break;
         }
+        update();
+    }
+
+    public void update() {
+        updateTitle();
         datamanager.readData(rcmList, type, time);
         chart = new BarChart(datamanager.getData());
         chartContainer.add(chart, "1");
         cardLayout.show(chartContainer, "1");
     }
 
-    public void update() {
-        datamanager.readData(rcmList, type, time);
-        chart = new BarChart(datamanager.getData());
-        chartContainer.add(chart, "1");
-        cardLayout.show(chartContainer, "1");
+    private void updateTitle() {
+        String timeStr = "";
+        switch (time) {
+            case DataManager.DAY:
+                timeStr = "DAY";
+                break;
+            case DataManager.WEEK:
+                timeStr = "WEEK";
+                break;
+            case DataManager.MONTH:
+                timeStr = "MONTH";
+                break;
+            case DataManager.YEAR:
+                timeStr = "YEAR";
+                break;
+        }
+        String typeStr = "";
+        switch (type) {
+            case DataManager.WEIGHT:
+                typeStr = "WEIGHT";
+                break;
+            case DataManager.VALUE:
+                typeStr = "MONETARY VALUE";
+                break;
+            case DataManager.ITEM:
+                typeStr = "NUMBER OF ITEMS";
+                break;
+            case DataManager.EMPTY:
+                typeStr = "TIMES EMPTIED";
+                break;
+        }
+        String title = "SORTED BY " + typeStr + " WITHIN A " + timeStr + ".";
+        titleLabel.setText(title);
     }
 }

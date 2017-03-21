@@ -74,4 +74,8 @@ public class RMOS {
     public double getAvailableCapacity(int id) throws Exception {
         return getRCM(id).getAvailableCapacity();
     }
+
+    public ArrayList<Recyclable> getRecyclableList() {
+        return recyclableList;
+    }
 }
